@@ -12,8 +12,8 @@ services:
       - OLLAMA_NUM_PARALLEL=1
       - OLLAMA_MAX_LOADED_MODELS=1
       - OLLAMA_KEEP_ALIVE=5m
-    cpus: "2.0"
-    mem_limit: 6g
+    cpus: "1.0"
+    mem_limit: 4g
 
   ollama-init:
     image: ollama/ollama:latest
