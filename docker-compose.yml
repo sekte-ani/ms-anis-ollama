@@ -4,21 +4,17 @@ services:
     container_name: ollama-server
     restart: unless-stopped
     ports:
-      - "${OLLAMA_PORT:-5591}:11434" # custom port → internal 11434
+      - "${OLLAMA_PORT:-5591}:11434"
     volumes:
-      - ./models:/root/.ollama # persist models biar gak re-download
+      - ./models:/root/.ollama
     environment:
-      - OLLAMA_HOST=${OLLAMA_HOST:-0.0.0.0}
-    # GPU support (uncomment kalau ada NVIDIA GPU)
-    # deploy:
-    #   resources:
-    #     reservations:
-    #       devices:
-    #         - driver: nvidia
-    #           count: all
-    #           capabilities: [gpu]
+      - OLLAMA_HOST=0.0.0.0:11434
+      - OLLAMA_NUM_PARALLEL=1
+      - OLLAMA_MAX_LOADED_MODELS=1
+      - OLLAMA_KEEP_ALIVE=5m
+    cpus: "2.0"
+    mem_limit: 6g
 
-  # Optional: pull model otomatis saat startup
   ollama-init:
     image: ollama/ollama:latest
     container_name: ollama-init
@@ -26,8 +22,8 @@ services:
       - ollama
     entrypoint: >
       sh -c "
-        sleep 5 &&
-        ollama pull llama3.1:8b
+        sleep 8 &&
+        ollama pull llama3.2:1b
       "
     environment:
       - OLLAMA_HOST=http://ollama:11434
